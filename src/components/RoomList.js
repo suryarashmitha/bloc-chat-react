@@ -14,7 +14,7 @@ class RoomList extends Component {
        var obj = {};
        obj.room = snapshot.val();
        obj.key = snapshot.key;
-       this.setState({ rooms: this.state.rooms.concat( obj.room ) })
+       this.setState({ rooms: this.state.rooms.concat(obj.room) })
      });
    }
    createRoom(e) {
