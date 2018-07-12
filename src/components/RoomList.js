@@ -14,7 +14,7 @@ class RoomList extends Component {
        var obj = {};
        obj.room = snapshot.val();
        obj.key = snapshot.key;
-       this.setState({ rooms: this.state.rooms.concat( obj ) })
+       this.setState({ rooms: this.state.rooms.concat( obj.room ) })
      });
    }
    createRoom(e) {
@@ -41,7 +41,7 @@ class RoomList extends Component {
          this.state.rooms.map( (room, index) =>
            <div className="rooms" key={index}
                 onClick={() => this.setActiveRoom(room)} >
-              {room.room}
+              {room.name}
            </div>
          )
        }
