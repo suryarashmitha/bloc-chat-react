@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import * as firebase from 'firebase';
 import './App.css';
+import * as firebase from 'firebase';
 import RoomList from './components/RoomList';
 
 var config = {
@@ -18,8 +17,7 @@ class App extends Component {
     return (
       <div className="App">
         <header>
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Bloc Chat</h1>
+          <h1>Bloc Chat</h1>
         </header>
         <RoomList firebase={firebase} />
       </div>
