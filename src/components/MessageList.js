@@ -41,13 +41,21 @@ createMessage(e){
   });
   this.setState({ username: '', content: '', sentAt: '', roomId: ''});
 }
+deleteMessage(message) {
+  this.messagesRef.child(message.key).remove();
+  const index = this.state.messages.indexOf(message);
+  this.state.messages.splice(index, 1);
+  this.setState({ messages: this.state.messages })
+}
 render() {
   return (
     <section className = "message-list">
       {
         this.state.messages.map((message,index) => {
            if (this.props.activeRoom && (message.roomId === this.props.activeRoom.key)) {
-              return <li key={index}>{message.username}:{message.content} <Moment format="YYYY/MM/DD HH:MM:SS">{message.sentAt}</Moment></li>
+              return <li key={index}>{message.username}:{message.content}
+              <Moment format="YYYY/MM/DD HH:MM:SS">{message.sentAt}</Moment>
+              <button type="button" onClick={() => this.deleteMessage(message)}>Delete</button></li>
            } else {
              return null
            }
