@@ -32,10 +32,6 @@ class RoomList extends Component {
        {newRoomName: e.target.value}
      );
    }
-   deleteRoom() {
-     this.roomsRef.child(this.props.activeRoom.key).remove();
-   }
-
     render(){
       return(
 
@@ -57,7 +53,6 @@ class RoomList extends Component {
                 onChange= { (e) => this.handleChange(e) } />
          <input type="submit" value="Create New Room"/>
         </form>
-        <button type="button" onClick={() => this.deleteRoom()}>Delete</button>
         </div>
       </section>
       );
