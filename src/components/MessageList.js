@@ -27,7 +27,7 @@ handleChange(e) {
   this.setState({
     username: this.props.currentUser.displayName,
     content: e.target.value,
-    sentAt: this.state.firebase.database.ServerValue.TIMESTAMP,
+    sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
     roomId: this.props.activeRoom.key
   });
 }
