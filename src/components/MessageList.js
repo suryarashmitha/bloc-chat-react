@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Moment from 'react-moment';
+import 'moment-timezone';
 class MessageList extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +27,7 @@ handleChange(e) {
   this.setState({
     username: this.props.currentUser.displayName,
     content: e.target.value,
-    sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+    sentAt: this.state.firebase.database.ServerValue.TIMESTAMP,
     roomId: this.props.activeRoom.key
   });
 }
@@ -45,7 +47,7 @@ render() {
       {
         this.state.messages.map((message,index) => {
            if (this.props.activeRoom && (message.roomId === this.props.activeRoom.key)) {
-              return <li key={index}>{message.username}:{message.content} {message.sentAt}</li>
+              return <li key={index}>{message.username}:{message.content} <Moment format="YYYY/MM/DD HH:MM:SS">{message.sentAt}</Moment></li>
            } else {
              return null
            }

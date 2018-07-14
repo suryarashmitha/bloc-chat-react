@@ -12,7 +12,6 @@ class RoomList extends Component {
 
    componentDidMount() {
      this.roomsRef.on('child_added', snapshot => {
-       // var obj = {};
        const room = snapshot.val();
        room.key = snapshot.key;
        this.setState({ rooms: this.state.rooms.concat(room) })
@@ -32,6 +31,9 @@ class RoomList extends Component {
      this.setState(
        {newRoomName: e.target.value}
      );
+   }
+   deleteRoom() {
+     this.roomsRef.child(this.props.activeRoom.key).remove();
    }
 
     render(){
@@ -55,6 +57,7 @@ class RoomList extends Component {
                 onChange= { (e) => this.handleChange(e) } />
          <input type="submit" value="Create New Room"/>
         </form>
+        <button type="button" onClick={() => this.deleteRoom()}>Delete</button>
         </div>
       </section>
       );
