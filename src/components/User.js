@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 class User extends Component {
-  constructor(props) {
-    super(props);
-    this.signIn = this.signIn.bind(this);
-    this.signOut = this.signOut.bind(this);
+  componentDidMount() {
+    this.props.firebase.auth().onAuthStateChanged( user => {
+      this.props.setUser(user);
+    });
   }
 
   signIn() {
@@ -25,23 +25,15 @@ class User extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.firebase.auth().onAuthStateChanged( user => {
-      this.props.setUser(user);
-    });
-  }
-
   render() {
     return (
       <section>
-        <h4>{(this.props.currentUser) ? this.props.currentUser.displayName : 'Guest'}</h4>
-        <button onClick={this.signIn}
-        onChange={(user) => this.handleChange(user)}>
+        <h4>Welcome {(this.props.currentUser) ? this.props.currentUser.displayName : 'Guest'}</h4>
+
         {(this.props.currentUser) === null ?
-          <span>Sign Up</span> :
-          <span>Sign In</span>
+          <button onClick={this.signIn.bind(this)} onChange={(user) => this.handleChange(user)}>Signin</button> :
+          <button onClick={this.signOut.bind(this)}>Sign Out</button>
         }
-      </button>{(this.props.currentUser) !== null ? <button onClick={this.signOut}>Sign Out</button> : (null) }
       </section>
     );
   }
