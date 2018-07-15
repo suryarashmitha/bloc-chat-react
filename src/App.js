@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import * as firebase from 'firebase';
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
 import User from './components/User';
-import EditableLabel from 'react-inline-editing';
 
 var config = {
     apiKey: "AIzaSyCnmwUQ26TDyyid1pmD0bnXTvRJF2hZOgw",
@@ -20,13 +18,16 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      activeRoom: "",
-      user:''
+      activeRoom: {name: "select a room"},
+      user:'',
+      editing: false
     };
     this.changeActiveRoom = this.changeActiveRoom.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.handleFocusOut = this.handleFocusOut.bind(this);
+    this.saveRoomName = this.saveRoomName.bind(this);
+    this.editName = this.editName.bind(this);
     this.setUser = this.setUser.bind(this);
+
+    this.allProps = this.props;
   }
 
   changeActiveRoom(room){
@@ -36,14 +37,36 @@ class App extends Component {
     this.setState({ user: user });
   }
 
-  handleFocus(text) {
-        console.log('Focused with text: ' + text);
-    }
+  saveRoomName(text) {
+    var val = this.refs.newText.value;
+    firebase.database().ref("rooms/"+this.state.activeRoom.key).update({ name: val });
+    let savedRoom = this.state.activeRoom;
+    savedRoom.name = val;
+    this.setState({
+      activeRoom: savedRoom,
+      editing: false
+    })
+  }
 
-    handleFocusOut(text) {
-        console.log('Left editor with text: ' + text);
-    }
+  editName(text) {
+    this.setState({
+     editing: true
+   })
+  }
+
   render() {
+    let form;
+    if (this.state.editing) {
+      form = <div>
+         <input type="text" ref="newText" defaultValue={this.state.activeRoom.name}/>
+         <button onClick={this.saveRoomName}>Save</button>
+     </div>;
+    } else {
+        form = <div>
+        <h3>you are in: {this.state.activeRoom.name}</h3>
+        <button onClick={this.editName}>Edit Room</button>
+      </div>;
+    }
     return (
       <div className="App">
         <header>
@@ -51,19 +74,7 @@ class App extends Component {
         </header>
          <div className="container">
           <div className="room-list">
-           <h3>you are in: {this.state.activeRoom.name || "select a room"}</h3>
-
-           <EditableLabel text={this.state.activeRoom.name || "select a room"}
-                           labelClassName='myLabelClass'
-                           inputClassName='myInputClass'
-                           inputWidth='200px'
-                           inputHeight='25px'
-                           labelFontWeight='bold'
-                           inputFontWeight='bold'
-                           onFocus={this.handleFocus}
-                           onFocusOut={this.handleFocusOut}
-                       />
-
+           {form}
             <ul>
               <RoomList firebase={firebase}
             activeRoom = {this.state.activeRoom }
